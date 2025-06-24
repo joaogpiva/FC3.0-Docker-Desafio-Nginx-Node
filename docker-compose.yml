@@ -1,0 +1,17 @@
+services:
+  db:
+    image: mysql
+    container_name: db
+    restart: always
+    tty: true
+    volumes: 
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: database_daora
+      MYSQL_ROOT_PASSWORD: senha_daora
+    networks:
+      - rede_dos_guri
+
+networks:
+  rede_dos_guri:
+    driver: bridge
