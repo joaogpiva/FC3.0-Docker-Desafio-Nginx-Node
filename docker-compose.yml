@@ -1,17 +1,44 @@
 services:
+  # configurado no docker-compose, sem Dockerfile
   db:
     image: mysql
-    container_name: db
+    container_name: db_daora
     restart: always
     tty: true
-    volumes: 
-      - ./mysql:/var/lib/mysql
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro # roda o script quando o banco é criado
+      - mysql_data:/var/lib/mysql 
     environment:
       MYSQL_DATABASE: database_daora
       MYSQL_ROOT_PASSWORD: senha_daora
+    networks:
+      - rede_dos_guri
+  
+  # app e proxy usam dockerfile
+  app:
+    build: 
+      context: node
+    container_name: app_daora
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - rede_dos_guri
+
+  proxy:
+    build: 
+      context: nginx
+    container_name: proxy_daora
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
     networks:
       - rede_dos_guri
 
 networks:
   rede_dos_guri:
     driver: bridge
+
+volumes:
+  mysql_data:
