@@ -20,6 +20,8 @@ services:
       context: node
     container_name: app_daora
     restart: always
+    volumes:
+      - ./node/src:/usr/src/app/src
     depends_on:
       - db
     networks:
