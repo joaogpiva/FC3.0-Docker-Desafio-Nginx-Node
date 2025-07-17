@@ -2,9 +2,7 @@ FROM node:latest
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-
-COPY wait-for-it.sh ./
+COPY . .
 
 EXPOSE 3000
 
